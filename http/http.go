@@ -99,7 +99,11 @@ func ipFromRequest(headers []string, r *http.Request, customIP bool) (net.IP, er
 		}
 	}
 	if remoteIP == "" {
-		host, _, err := net.SplitHostPort(r.RemoteAddr)
+		remoteIP = r.RemoteAddr
+	}
+	port := strings.LastIndex(remoteIP, ":")
+	if port != -1 {
+		host, _, err := net.SplitHostPort(remoteIP)
 		if err != nil {
 			return nil, err
 		}
